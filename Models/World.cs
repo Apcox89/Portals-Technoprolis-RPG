@@ -8,6 +8,8 @@ namespace Portals_Technoprolis_RPG.Models
 {
 
     //to hold the values set for game object interaction
+    //really should be data communicated through an API/DB
+    //SSMS + custom Json <RestSharp> style API
     public static class World
     {
         public static readonly List<Location> Locations = new List<Location>();

@@ -29,6 +29,7 @@ using Portals_Technoprolis_RPG.Models;
 /*
  ==> Need to abstract logic and add real data
     + working off branching struct for upcoming features
+    + cleaning out program-class
  */
 
 namespace Portals_Technoprolis_RPG
