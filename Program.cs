@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Portals_Technoprolis_RPG.Models;
+using Portals_Technoprolis_RPG.Activities;
 
 /*
  * Andy Cox
@@ -141,32 +142,23 @@ namespace Portals_Technoprolis_RPG
 
                 Console.WriteLine("Do you want to boost your player's 'Health','Damage', 'Knowledge', or 'Shield'?");
                 string player = Console.ReadLine();
+                //input = Console.ReadLine();
 
-                //namespace used to collect data from user input based on template for data in the abstract/sub classes
-                Type p = Type.GetType("PortalsRPG." + player);
-                try
+                Type p = Type.GetType("Portals_Technoprolis_RPG.Activities." + player);
+
+                PlayerBoost pBoost = (PlayerBoost)Activator.CreateInstance(p);
+                boostMethod.SetPlayerBoost(pBoost);
+                boostMethod.Boost();
+                Console.WriteLine("You have chosen the " + player + " boost. \n");
+
+                //add the chosen skill to the Skill-attribute class
+                skills.Add(new Skill(001, player));
+                Console.WriteLine("The new skill has upgraded your current " + player + " level. \n");
+                foreach (Skill aSkill in skills)
                 {
-                    PlayerBoost pBoost = (PlayerBoost)Activator.CreateInstance(p);
-                    boostMethod.SetPlayerBoost(pBoost);
-                    boostMethod.Boost();
-                    Console.WriteLine("You have chosen the " + player + " boost. \n");
-
-                    //add the chosen skill to the Skill-attribute class
-                    skills.Add(new Skill(001, player));
-                    Console.WriteLine("The new skill has upgraded your current " + player + " level. \n");
-                    foreach (Skill aSkill in skills)
-                    {
-                        Console.WriteLine(aSkill + "\n");
-                    }
-
-                    break;
-
+                    Console.WriteLine(aSkill + "\n");
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message + " \n");
 
-                }
                 Console.WriteLine(" = = = = = = = = \n");
                 break;
 
@@ -179,67 +171,5 @@ namespace Portals_Technoprolis_RPG
 
     }
 
-    //basically importing HW-7 module "Strategy" design example here:
-    //abstract class acts to pass functionality to sub-classes
-    abstract class PlayerBoost
-    {
-        public abstract void Boost(string player);
-    }
-
-    //4 subclasses return a different outcome but use the same data type to achieve that outcome
-    class Health : PlayerBoost
-    {
-        public override void Boost(string player)
-        {
-            Console.WriteLine("\n  " + player + " applied to overall health.");
-        }
-    }
-
-    class Damage : PlayerBoost
-    {
-        public override void Boost(string player)
-        {
-            Console.WriteLine("\n  " + player + " applied to damage dealing to npcs.");
-        }
-    }
-
-    class Knowledge : PlayerBoost
-    {
-        public override void Boost(string player)
-        {
-            Console.WriteLine("\n  " + player + " applied to programming knowledge to enter Portals.");
-        }
-    }
-
-    class Shield : PlayerBoost
-    {
-        public override void Boost(string player)
-        {
-            Console.WriteLine("\n  " + player + " applied to your armor.");
-        }
-    }
-
-    //this class acts as a constructor to define the behavior of the data type being passed in by the user
-    class BoostingMethod
-    {
-        private string Player;
-        private PlayerBoost _playerBoost;
-
-        public void SetPlayerBoost(PlayerBoost elixerBoost)
-        {
-            this._playerBoost = elixerBoost;
-        }
-
-        public void SetBoost(string name)
-        {
-            Player = name;
-        }
-
-        public void Boost()
-        {
-            _playerBoost.Boost(Player);
-            Console.WriteLine();
-        }
-    }
 }
 

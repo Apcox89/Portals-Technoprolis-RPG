@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Portals_Technoprolis_RPG.Models;
+using Portals_Technoprolis_RPG.Activities;
 
 namespace Portals_Technoprolis_RPG.Models
 {
