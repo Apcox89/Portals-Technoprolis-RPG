@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Portals_Technoprolis_RPG.Database;
 
@@ -11,9 +12,11 @@ using Portals_Technoprolis_RPG.Database;
 namespace Portals_Technoprolis_RPG.Migrations
 {
     [DbContext(typeof(PortalsDbContext))]
-    partial class PortalsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240831221650_QuestAchievementTables")]
+    partial class QuestAchievementTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

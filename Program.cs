@@ -26,9 +26,7 @@ using Microsoft.EntityFrameworkCore;
 
 //Sept-24-Update:
 /*
- ==> Need to abstract logic and add real data
-    + working off branching struct for upcoming features
-    + cleaning out program-class
+ ==> Todo: Add more data-entities for the diff. class models
  */
 
 namespace Portals_Technoprolis_RPG

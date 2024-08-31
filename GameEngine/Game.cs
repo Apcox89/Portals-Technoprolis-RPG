@@ -101,7 +101,7 @@ namespace Portals_Technoprolis_RPG.GameEngine
                 boostMethod.SetBoost(input);
                 Console.WriteLine("Do you want to boost your player's 'Health', 'Damage', 'Knowledge', or 'Shield'?");
                 string playerBoost = Console.ReadLine();
-
+                //Cox note: handle nulls or bad user-input gracefull
                 Type p = Type.GetType("Portals_Technoprolis_RPG.Activities." + playerBoost);
                 PlayerBoost pBoost = (PlayerBoost)Activator.CreateInstance(p);
 
