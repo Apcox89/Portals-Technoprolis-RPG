@@ -67,6 +67,8 @@ namespace Portals_Technoprolis_RPG
                     services.AddDbContext<PortalsDbContext>(options =>
                         options.UseSqlServer(context.Configuration.GetConnectionString("PortalsDb")));
 
+                    services.AddScoped<IPortalsDbContext>(provider => provider.GetService<PortalsDbContext>());
+
                     services.AddTransient<ConsoleApp>(); // Add ConsoleApp to services
                 });
 

@@ -5,7 +5,7 @@ using Portals_Technoprolis_RPG.Models;
 
 namespace Portals_Technoprolis_RPG.Database;
 
-public partial class PortalsDbContext : DbContext
+public partial class PortalsDbContext : DbContext, IPortalsDbContext
 {
     public PortalsDbContext(DbContextOptions<PortalsDbContext> options)
         : base(options)
@@ -15,6 +15,11 @@ public partial class PortalsDbContext : DbContext
     public DbSet<Player> Players { get; set; }
     public DbSet<Npc> Npcs { get; set; }
     public DbSet<Skill> Skills { get; set; }
+    //Polymorphism ex: 
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        return await base.SaveChangesAsync(cancellationToken);
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Configure Character and Player

@@ -68,7 +68,7 @@ namespace Portals_Technoprolis_RPG.GameEngine
 
             // Add player to the database
             _dbContext.Players.Add(player);
-             _dbContext.SaveChanges();
+            _dbContext.SaveChanges();
 
             return player;
         }
