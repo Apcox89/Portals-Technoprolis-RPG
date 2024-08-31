@@ -39,47 +39,36 @@ namespace Portals_Technoprolis_RPG
 {
     class Program
     {
-        static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            Game game = new Game();
-            game.Start();
-            //Cox note: need to abstract the server-string away into a secrets file
-            var serviceProvider = ServiceHelper.ConfigureServices();
+            var host = CreateHostBuilder(args).Build();
 
-            // Now you can resolve your DbContext and use it
-            using (var context = serviceProvider.GetRequiredService<PortalsDbContext>())
+            using (var scope = host.Services.CreateScope())
             {
-                // Your code to use the context --ex:
-                //var data = context.YourEntity.ToList();
-                //Console.WriteLine(data);
+                var services = scope.ServiceProvider;
+                var consoleApp = services.GetRequiredService<ConsoleApp>();
+                consoleApp.Run();
             }
 
-            var builder = WebApplication.CreateBuilder(args);
-
-            // Load configuration from user secrets if in development mode
-            if (builder.Environment.IsDevelopment())
-            {
-                builder.Configuration.AddUserSecrets<Program>();
-            }
-
-            // Add services to the container.
-            builder.Services.AddDbContext<PortalsDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("PortalsDb")));
-
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseHttpsRedirection();
-            app.UseRouting();
-
-            app.Run();
+            await host.RunAsync();
 
         }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((context, config) =>
+                {
+                    if (context.HostingEnvironment.IsDevelopment())
+                    {
+                        config.AddUserSecrets<Program>();
+                    }
+                }).ConfigureServices((context, services) =>
+                {
+                    services.AddDbContext<PortalsDbContext>(options =>
+                        options.UseSqlServer(context.Configuration.GetConnectionString("PortalsDb")));
+
+                    services.AddTransient<ConsoleApp>(); // Add ConsoleApp to services
+                });
 
     }
 

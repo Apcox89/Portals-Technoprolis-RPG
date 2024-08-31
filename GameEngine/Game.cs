@@ -5,17 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Portals_Technoprolis_RPG.Models;
 using Portals_Technoprolis_RPG.Activities;
+using Portals_Technoprolis_RPG.Database;
 
 
 namespace Portals_Technoprolis_RPG.GameEngine
 {
     public class Game
     {
+        private readonly PortalsDbContext _dbContext;
         private Player _player;
         private CombatManager _combatManager;
 
-        public Game()
+        public Game(PortalsDbContext dbContext)
         {
+            _dbContext = dbContext;
             _player = InitializePlayer();
             _combatManager = new CombatManager();
         }
@@ -55,7 +58,19 @@ namespace Portals_Technoprolis_RPG.GameEngine
             Console.WriteLine("What do you want to name your Player?");
             string input = Console.ReadLine();
 
-            return new Player(001, input, 10, 0, 1, 100, 100);
+            var player = new Player(001, input, 10, 0, 1, 100, 100);
+
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                Console.WriteLine("Player name cannot be empty.");
+                return player; // or set a default name
+            }
+
+            // Add player to the database
+            _dbContext.Players.Add(player);
+             _dbContext.SaveChanges();
+
+            return player;
         }
 
         private void HandlePostCombat(Npc roboGuard)

@@ -1,28 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Portals_Technoprolis_RPG.Models;
 
 namespace Portals_Technoprolis_RPG.Database;
 
 public partial class PortalsDbContext : DbContext
 {
-    public PortalsDbContext()
-    {
-    }
-
     public PortalsDbContext(DbContextOptions<PortalsDbContext> options)
         : base(options)
     {
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=Portals;Trusted_Connection=True;");
-
+    public DbSet<Player> Players { get; set; }
+    public DbSet<Npc> Npcs { get; set; }
+    public DbSet<Skill> Skills { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        OnModelCreatingPartial(modelBuilder);
-    }
+        // Configure Character and Player
+        modelBuilder.Entity<Character>()
+            .ToTable("Character")
+            .HasDiscriminator<string>("CharacterType")
+            .HasValue<Player>("Player")
+            .HasValue<Npc>("Npc");
 
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        // Configure any additional mappings or constraints if necessary
+
+        base.OnModelCreating(modelBuilder);
+    }
 }

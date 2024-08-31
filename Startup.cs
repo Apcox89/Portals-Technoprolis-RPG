@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Portals_Technoprolis_RPG.Database;
 using System;
@@ -11,14 +12,41 @@ namespace Portals_Technoprolis_RPG
 {
     public class Startup
     {
+
+        // Other methods...
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+
+        // ConfigureServices method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<PortalsDbContext>(options =>
-                options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=Portals;Trusted_Connection=True;"));
+                options.UseSqlServer(Configuration.GetConnectionString("PortalsDb")));
 
-            // Other service registrations
+            // Add other services as needed
         }
 
-        // Other methods...
+        // Configure method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseRouting();
+
+            // Add other middleware as needed
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers(); // Or other endpoints as required
+            });
+        }
     }
 }
