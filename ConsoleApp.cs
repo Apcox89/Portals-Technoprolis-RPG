@@ -1,8 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Portals_Technoprolis_RPG.Database;
+﻿using Portals_Technoprolis_RPG.Database;
 using Portals_Technoprolis_RPG.GameEngine;
-using System.Threading.Tasks;
 
 namespace Portals_Technoprolis_RPG
 {

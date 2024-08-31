@@ -19,13 +19,14 @@ namespace Portals_Technoprolis_RPG.GameEngine
         public Game(PortalsDbContext dbContext)
         {
             _dbContext = dbContext;
-            _player = InitializePlayer();
             _combatManager = new CombatManager();
         }
 
         public void Start()
         {
             Console.WriteLine("Welcome to Technoprolis!");
+
+            _player = InitializePlayer();
 
             // Display Player Stats
             Console.WriteLine($"Player stats: {_player.DisplayStats()}\n");
