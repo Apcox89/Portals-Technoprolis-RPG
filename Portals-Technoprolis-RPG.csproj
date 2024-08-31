@@ -4,12 +4,9 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>Portals_Technoprolis_RPG</RootNamespace>
+	<UserSecretsId>9CCBC434-084A-4D1C-86DA-84E0E41A1FBC</UserSecretsId>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <PropertyGroup>
-	<UserSecretsId>9CCBC434-084A-4D1C-86DA-84E0E41A1FBC</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

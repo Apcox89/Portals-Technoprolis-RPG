@@ -4,6 +4,7 @@ using Portals_Technoprolis_RPG.GameEngine;
 using Microsoft.Extensions.DependencyInjection;
 using Portals_Technoprolis_RPG.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 /*
  * Andy Cox
@@ -64,12 +65,15 @@ namespace Portals_Technoprolis_RPG
                     }
                 }).ConfigureServices((context, services) =>
                 {
+                    var configuration = context.Configuration;
+                    var connectionString = configuration.GetConnectionString("PortalsDb");
+
                     services.AddDbContext<PortalsDbContext>(options =>
-                        options.UseSqlServer(context.Configuration.GetConnectionString("PortalsDb")));
+                        options.UseSqlServer(connectionString));
 
                     services.AddScoped<IPortalsDbContext>(provider => provider.GetService<PortalsDbContext>());
 
-                    services.AddTransient<ConsoleApp>(); // Add ConsoleApp to services
+                    services.AddTransient<ConsoleApp>();
                 });
 
     }
