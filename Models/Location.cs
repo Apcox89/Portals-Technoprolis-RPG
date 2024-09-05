@@ -6,6 +6,7 @@ using Portals_Technoprolis_RPG.Activities;
 namespace Portals_Technoprolis_RPG.Models
 {
     [Serializable]
+    //Cox note: add to db
     public class Location
     {
         //properties

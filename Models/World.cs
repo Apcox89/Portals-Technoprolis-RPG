@@ -10,6 +10,7 @@ namespace Portals_Technoprolis_RPG.Models
     //to hold the values set for game object interaction
     //really should be data communicated through an API/DB
     //SSMS + custom Json <RestSharp> style API
+    //Cox note: add to db
     public static class World
     {
         public static readonly List<Location> Locations = new List<Location>();
@@ -111,24 +112,21 @@ namespace Portals_Technoprolis_RPG.Models
 
         private static void GenerateQuests()
         {
-            Quest clearTerminalAccess = new Quest(MISSION_ID_CLEAR_TERMINAL_ACCESS, "Terminal Access",
-                "Hack the terminal to gain a comms access port to Technoprolis. " +
-                " Decrypt 5 messages using your Programeter device to earn the communications skill upgrade., and earn 250xp.", 250, 25);
-
+            Quest clearTerminalAccess = new Quest();
+            clearTerminalAccess.ID = MISSION_ID_CLEAR_TERMINAL_ACCESS;
+            clearTerminalAccess.Name = "Terminal Access";
+            clearTerminalAccess.Description = "Hack the terminal to gain a comms access port to Technoprolis. " +
+                                              "Decrypt 5 messages using your Programeter device to earn the communications skill upgrade, and earn 250xp.";
+            clearTerminalAccess.AwardXP = 250;
+            clearTerminalAccess.AwardLoot = 25;
         }
 
 
         public static Quest FindQuestByID(int id)
         {
-            foreach (Quest _quest in Quests)
-            {
-                if (_quest.QuestID == id)
-                {
-                    return _quest;
-                }
-            }
-            return null;
+            return Quests.FirstOrDefault(q => q.ID == id);
         }
+
 
         public static Artifact FindArtifactByID(int id)
         {

@@ -9,6 +9,7 @@ namespace Portals_Technoprolis_RPG.Models
     public class Artifact
     {
         //base class for items - weapons, elixers, loot, and inventory
+        //Cox note: add to db
         public int ArtifactID { get; set; }
         public string ArtifactName { get; set; }
 

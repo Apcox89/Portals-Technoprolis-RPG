@@ -9,12 +9,14 @@ namespace Portals_Technoprolis_RPG.Models
     public class Character
     {
         //both Npc's and the Player are a type of Character
-        //they will both have health attributes and be either alive or dead:
+        public int Id { get; set; } // Primary key
         public int CurrentHealth { get; set; }
         public int MaxHealth { get; set; }
         public bool IsDead { get; set; }
 
-        //struct:
+        //constructor:
+        public Character() { }
+
         public Character(int currentHealth, int maxHealth)
         {
             CurrentHealth = currentHealth;
@@ -22,9 +24,19 @@ namespace Portals_Technoprolis_RPG.Models
 
         }
 
-        public int HealthUpdate(int healthStat)
+        public void UpdateHealth(int healthChange)
         {
-            return this.CurrentHealth = healthStat;
+            CurrentHealth = Math.Clamp(CurrentHealth + healthChange, 0, MaxHealth);
+        }
+
+        public void TakeDamage(int damage)
+        {
+            UpdateHealth(-damage);
+        }
+
+        public void Heal(int healingAmount)
+        {
+            UpdateHealth(healingAmount);
         }
     }
 
@@ -38,6 +50,7 @@ namespace Portals_Technoprolis_RPG.Models
 
         //implement skill class interface/strategy
         public List<Skill> PlayerSkillCollection { get; set; }
+        public Player() : base() { }
 
         public Player(int pID, string pName, int loot, int xp, int level,
             int currentHealth, int maxHealth) : base(currentHealth, maxHealth)
@@ -82,6 +95,8 @@ namespace Portals_Technoprolis_RPG.Models
         public int MaxDamage { get; set; }
         public int AwardXP { get; set; }
         public int AwardLoot { get; set; }
+
+        public Npc() : base() { }
 
         public Npc(int npcid, string npcname, int maxDamage, int awardXP,
             int awardLoot, int currentHealth, int maxHealth) : base(currentHealth, maxHealth)
