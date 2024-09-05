@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Portals_Technoprolis_RPG.Models;
-using Portals_Technoprolis_RPG.Activities;
+﻿using Portals_Technoprolis_RPG.Database;
+using Microsoft.EntityFrameworkCore;
 
 /*
  * Andy Cox
@@ -26,148 +24,50 @@ using Portals_Technoprolis_RPG.Activities;
  * at ln150 where the Skill chosen by the Player dynamically is assigned to their Skill-class.
  */
 
-//May-22-Update:
+//Sept-24-Update:
 /*
- ==> Need to abstract logic and add real data
-    + working off branching struct for upcoming features
-    + cleaning out program-class
+ ==> Todo: Add more data-entities for the diff. class models
  */
 
 namespace Portals_Technoprolis_RPG
 {
     class Program
     {
-        static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            string input;
+            var host = CreateHostBuilder(args).Build();
 
-            int playerInteraction;
-
-            Player player1 = new Player(001, " ", 10, 0, 1, 100, 100);
-            Console.WriteLine("Welcome to Technoprolis, what do you want to name your Player?");
-            input = Console.ReadLine();
-            player1.PlayerName = input.ToString();
-
-            Console.WriteLine(" Player stats: {0} \n", player1.DisplayStats());
-
-            Location start = new Location(World.LOCATION_ID_BASE_CAMP, "Base-Camp", "Start-Game");
-            Console.WriteLine(start.DisplayLocation());
-
-            Weapon bluntAxeHandle = new Weapon(1, 3, 1, "Blunt Axe Handle");
-
-            Console.WriteLine(bluntAxeHandle.DisplayWeapon() + "\n");
-            Console.WriteLine("Complete the initial Quest to assign a new skill to your Character.\n");
-
-            Console.WriteLine("You leave your rebel base camp, and find some robo-guard at a destroyed statue: \n");
-            Console.WriteLine(" ~~ Beat the robo-guard to assign your character a new skill ~~ \n");
-
-            Npc roboGuard1 = new Npc(World.NPC_ID_ROBO_COMMANDO, "Robo-Commando", 3, 20, 5, 10, 10);
-
-            do
+            using (var scope = host.Services.CreateScope())
             {
-                int health;
-
-                Console.WriteLine("Use your weapon to defeat the roboguard. (type a number 1-3) \n");
-                input = Console.ReadLine();
-
-                playerInteraction = int.Parse(input);
-
-                //need to constrain so user can't go into negative points on roboguard
-                if ((playerInteraction >= 1 && playerInteraction <= 3))
-                {
-
-                    Console.WriteLine("You deal " + playerInteraction + " damage to the robo-guard.");
-
-                    health = roboGuard1.CurrentHealth - playerInteraction;
-
-                    Console.WriteLine("Robo guard current health: " + roboGuard1.HealthUpdate(health));
-
-                }
-                else
-                {
-                    //player loses 10 health for not entering correct number:
-                    health = player1.CurrentHealth - 10;
-                    Console.WriteLine("You lose health points " + player1.HealthUpdate(health) + "\n");
-                    Console.WriteLine("Please type a number in your weapon's range! \n");
-                }
-
-                if (roboGuard1.IsDead == true)
-                {
-                    roboGuard1.CurrentHealth = 0;
-                    break;
-                }
-
-                if (player1.CurrentHealth == 0)
-                {
-                    //player is dead from lost battle, reset:
-                    Environment.Exit(0);
-                }
-
-                if (input == null)
-                {
-                    Environment.Exit(0);
-                }
-
+                var services = scope.ServiceProvider;
+                var consoleApp = services.GetRequiredService<ConsoleApp>();
+                consoleApp.Run();
             }
 
-            while (roboGuard1.CurrentHealth > 0);
-
-            player1.LootUpdate(player1.Loot + roboGuard1.AwardLoot);
-            player1.PointsUpdate(player1.Xp + roboGuard1.AwardXP);
-            player1.LvlUp(player1.Level + 1);
-
-            Console.WriteLine("= = = = = = = = = = = = = = = ");
-            Console.WriteLine("You've achieved a new level!");
-            Console.WriteLine("= = = = = = = = = = = = = = = \n");
-
-            Console.WriteLine(player1.DisplayStats() + "\n");
-            Console.WriteLine("You defeat the robo-guard to gain a skill. \n");
-
-            //assign skill abstract strategy implementation + implement skill interface
-            BoostingMethod boostMethod = new BoostingMethod();
-
-            List<Skill> skills = new List<Skill>();
-            //add the chosen skill to the Skill Class
-
-            while (true)
-            {
-                Console.WriteLine("Do you want to boost your player skill now or save? \n(type 'boost' or 'save') \n");
-                input = Console.ReadLine();
-                if (input == "save")
-                {
-                    break;
-                }
-
-                boostMethod.SetBoost(input);
-
-                Console.WriteLine("Do you want to boost your player's 'Health','Damage', 'Knowledge', or 'Shield'?");
-                string player = Console.ReadLine();
-                //input = Console.ReadLine();
-
-                Type p = Type.GetType("Portals_Technoprolis_RPG.Activities." + player);
-
-                PlayerBoost pBoost = (PlayerBoost)Activator.CreateInstance(p);
-                boostMethod.SetPlayerBoost(pBoost);
-                boostMethod.Boost();
-                Console.WriteLine("You have chosen the " + player + " boost. \n");
-
-                //add the chosen skill to the Skill-attribute class
-                skills.Add(new Skill(001, player));
-                Console.WriteLine("The new skill has upgraded your current " + player + " level. \n");
-                foreach (Skill aSkill in skills)
-                {
-                    Console.WriteLine(aSkill + "\n");
-                }
-
-                Console.WriteLine(" = = = = = = = = \n");
-                break;
-
-            }
-
-            Console.WriteLine("See you next time " + player1.PlayerName + " in another battle for Technoprolis. \n");
-            Environment.Exit(0);
+            await host.RunAsync();
 
         }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((context, config) =>
+                {
+                    if (context.HostingEnvironment.IsDevelopment())
+                    {
+                        config.AddUserSecrets<Program>();
+                    }
+                }).ConfigureServices((context, services) =>
+                {
+                    var configuration = context.Configuration;
+                    var connectionString = configuration.GetConnectionString("PortalsDb");
+
+                    services.AddDbContext<PortalsDbContext>(options =>
+                        options.UseSqlServer(connectionString));
+
+                    services.AddScoped<IPortalsDbContext>(provider => provider.GetService<PortalsDbContext>());
+
+                    services.AddTransient<ConsoleApp>();
+                });
 
     }
 
