@@ -51,35 +51,68 @@ namespace Portals_Technoprolis_RPG.Migrations
                     b.ToTable("Achievements");
                 });
 
-            modelBuilder.Entity("Portals_Technoprolis_RPG.Models.Character", b =>
+            modelBuilder.Entity("Portals_Technoprolis_RPG.Models.Npc", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<string>("CharacterType")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
+                    b.Property<int>("AwardLoot")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AwardXP")
+                        .HasColumnType("int");
 
                     b.Property<int>("CurrentHealth")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDead")
-                        .HasColumnType("bit");
+                    b.Property<int>("MaxDamage")
+                        .HasColumnType("int");
 
                     b.Property<int>("MaxHealth")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("Character", (string)null);
+                    b.HasKey("ID");
 
-                    b.HasDiscriminator<string>("CharacterType").HasValue("Character");
+                    b.ToTable("Npcs", (string)null);
+                });
 
-                    b.UseTphMappingStrategy();
+            modelBuilder.Entity("Portals_Technoprolis_RPG.Models.Player", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("CurrentHealth")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Loot")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxHealth")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Xp")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Players", (string)null);
                 });
 
             modelBuilder.Entity("Portals_Technoprolis_RPG.Models.Quest", b =>
@@ -120,7 +153,7 @@ namespace Portals_Technoprolis_RPG.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SkillID"));
 
-                    b.Property<int?>("PlayerId")
+                    b.Property<int?>("PlayerID")
                         .HasColumnType("int");
 
                     b.Property<string>("SkillName")
@@ -129,55 +162,9 @@ namespace Portals_Technoprolis_RPG.Migrations
 
                     b.HasKey("SkillID");
 
-                    b.HasIndex("PlayerId");
+                    b.HasIndex("PlayerID");
 
-                    b.ToTable("Skills");
-                });
-
-            modelBuilder.Entity("Portals_Technoprolis_RPG.Models.Npc", b =>
-                {
-                    b.HasBaseType("Portals_Technoprolis_RPG.Models.Character");
-
-                    b.Property<int>("AwardLoot")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AwardXP")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MaxDamage")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NpcID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("NpcName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasDiscriminator().HasValue("Npc");
-                });
-
-            modelBuilder.Entity("Portals_Technoprolis_RPG.Models.Player", b =>
-                {
-                    b.HasBaseType("Portals_Technoprolis_RPG.Models.Character");
-
-                    b.Property<int>("Level")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Loot")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlayerID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PlayerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Xp")
-                        .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue("Player");
+                    b.ToTable("Skills", (string)null);
                 });
 
             modelBuilder.Entity("Portals_Technoprolis_RPG.Models.Achievement", b =>
@@ -195,17 +182,17 @@ namespace Portals_Technoprolis_RPG.Migrations
                 {
                     b.HasOne("Portals_Technoprolis_RPG.Models.Player", null)
                         .WithMany("PlayerSkillCollection")
-                        .HasForeignKey("PlayerId");
-                });
-
-            modelBuilder.Entity("Portals_Technoprolis_RPG.Models.Quest", b =>
-                {
-                    b.Navigation("AchievementCollection");
+                        .HasForeignKey("PlayerID");
                 });
 
             modelBuilder.Entity("Portals_Technoprolis_RPG.Models.Player", b =>
                 {
                     b.Navigation("PlayerSkillCollection");
+                });
+
+            modelBuilder.Entity("Portals_Technoprolis_RPG.Models.Quest", b =>
+                {
+                    b.Navigation("AchievementCollection");
                 });
 #pragma warning restore 612, 618
         }
