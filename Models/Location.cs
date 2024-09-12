@@ -10,8 +10,8 @@ namespace Portals_Technoprolis_RPG.Models
     public class Location
     {
         //properties
-        public int LocationID { get; set; }
-        public string LocationName { get; set; }
+        public int ID { get; set; }
+        public string Name { get; set; }
         public string LocationDescription { get; set; }
 
         //object type properties for NPC/Items/Quests available to Player
@@ -28,15 +28,15 @@ namespace Portals_Technoprolis_RPG.Models
 
         public Location(int locID, string locName, string locDescript)
         {
-            LocationID = locID;
-            LocationName = locName;
+            ID = locID;
+            Name = locName;
             LocationDescription = locDescript;
         }
 
         public string DisplayLocation()
         {
 
-            return "Current location: " + LocationName + " " + LocationDescription + " \n";
+            return "Current location: " + Name + " " + LocationDescription + " \n";
         }
 
         public void MovePlayer()

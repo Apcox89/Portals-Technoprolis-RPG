@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Portals_Technoprolis_RPG.Models;
+﻿using Portals_Technoprolis_RPG.Models;
 using Portals_Technoprolis_RPG.Activities;
 using Portals_Technoprolis_RPG.Database;
 
@@ -29,7 +24,7 @@ namespace Portals_Technoprolis_RPG.GameEngine
             _player = InitializePlayer();
 
             // Display Player Stats
-            Console.WriteLine($"Player stats: {_player.DisplayStats()}\n");
+            Console.WriteLine($"Player stats: \n{_player.DisplayStats()}\n");
 
             // Start the Game
             Location start = new Location(World.LOCATION_ID_BASE_CAMP, "Base-Camp", "Start-Game");
@@ -51,7 +46,7 @@ namespace Portals_Technoprolis_RPG.GameEngine
             // Skill Boosting
             BoostPlayerSkills();
 
-            Console.WriteLine($"See you next time {_player.PlayerName} in another battle for Technoprolis.\n");
+            Console.WriteLine($"See you next time {_player.Name} in another battle for Technoprolis.\n");
         }
 
         private Player InitializePlayer()
@@ -59,7 +54,7 @@ namespace Portals_Technoprolis_RPG.GameEngine
             Console.WriteLine("What do you want to name your Player?");
             string input = Console.ReadLine();
 
-            var player = new Player(001, input, 10, 0, 1, 100, 100);
+            var player = new Player(input, 10, 1, 1, 100, 100);
 
             if (string.IsNullOrWhiteSpace(input))
             {

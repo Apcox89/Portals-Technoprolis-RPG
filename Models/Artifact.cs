@@ -9,14 +9,13 @@ namespace Portals_Technoprolis_RPG.Models
     public class Artifact
     {
         //base class for items - weapons, elixers, loot, and inventory
-        //Cox note: add to db
-        public int ArtifactID { get; set; }
-        public string ArtifactName { get; set; }
+        public int ID { get; set; }
+        public string Name { get; set; }
 
         public Artifact(int artifactId, string artifactName)
         {
-            ArtifactID = artifactId;
-            ArtifactName = artifactName;
+            ID = artifactId;    
+            Name = artifactName;
         }
     }
 
@@ -33,7 +32,7 @@ namespace Portals_Technoprolis_RPG.Models
 
         public string DisplayWeapon()
         {
-            return "You're equipped with " + ArtifactName + " Dealing Damage range from " + MinimumDamage + " to " + MaximumDamage;
+            return "You're equipped with " + Name + " Dealing Damage range from " + MinimumDamage + " to " + MaximumDamage;
         }
 
 

@@ -132,7 +132,7 @@ namespace Portals_Technoprolis_RPG.Models
         {
             foreach (Artifact _artifact in Artifacts)
             {
-                if (_artifact.ArtifactID == id)
+                if (_artifact.ID == id)
                 {
                     return _artifact;
                 }
@@ -144,7 +144,7 @@ namespace Portals_Technoprolis_RPG.Models
         {
             foreach (Npc _npc in Npcs)
             {
-                if (_npc.NpcID == id)
+                if (_npc.ID == id)
                 {
                     return _npc;
                 }
@@ -156,7 +156,7 @@ namespace Portals_Technoprolis_RPG.Models
         {
             foreach (Location _location in Locations)
             {
-                if (_location.LocationID == id)
+                if (_location.ID == id)
                 {
                     return _location;
                 }
