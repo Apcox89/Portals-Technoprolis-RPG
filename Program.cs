@@ -1,5 +1,8 @@
 ﻿using Portals_Technoprolis_RPG.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+
 
 /*
  * Andy Cox
@@ -33,29 +36,39 @@ namespace Portals_Technoprolis_RPG
 {
     class Program
     {
-        public static async Task Main(string[] args)
+        //swagger api-switch:
+        //public static async Task Main(string[] args)
+        //{
+        //    var host = CreateHostBuilder(args).Build();
+
+        //    using (var scope = host.Services.CreateScope())
+        //    {
+        //        var services = scope.ServiceProvider;
+        //        var consoleApp = services.GetRequiredService<ConsoleApp>();
+        //        consoleApp.Run();
+        //    }
+
+        //    await host.RunAsync();
+
+        //}
+        public static void Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build();
-
-            using (var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                var consoleApp = services.GetRequiredService<ConsoleApp>();
-                consoleApp.Run();
-            }
-
-            await host.RunAsync();
-
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls("http://localhost:5001");
+                })
                 .ConfigureAppConfiguration((context, config) =>
                 {
-                    if (context.HostingEnvironment.IsDevelopment())
-                    {
-                        config.AddUserSecrets<Program>();
-                    }
+                    //if (context.HostingEnvironment.IsDevelopment())
+                    //{
+                    //    config.AddUserSecrets<Program>();
+                    //}
                 }).ConfigureServices((context, services) =>
                 {
                     var configuration = context.Configuration;
@@ -64,7 +77,7 @@ namespace Portals_Technoprolis_RPG
                     services.AddDbContext<PortalsDbContext>(options =>
                         options.UseSqlServer(connectionString));
 
-                    services.AddScoped<IPortalsDbContext>(provider => provider.GetService<PortalsDbContext>());
+                    services.AddScoped<IPortalsDbContext>(provider => provider.GetService<PortalsDbContext>()!);
 
                     services.AddTransient<ConsoleApp>();
                 });
