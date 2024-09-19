@@ -29,8 +29,19 @@ namespace Portals_Technoprolis_RPG.Controllers
 
                 _context.Players.Add(player);
                 await _context.SaveChangesAsync();
+                //Cox note: demo temp-data-model decoupled from raw db model. :-)
+                var playerDto = new PlayerDto
+                {
+                    ID = player.ID,
+                    Name = player.Name,
+                    Loot = player.Loot,
+                    Xp = player.Xp,
+                    Level = player.Level,
+                    CurrentHealth = player.CurrentHealth,
+                    MaxHealth = player.MaxHealth
+                };
 
-                return CreatedAtAction(nameof(GetPlayerById), new { id = player.ID }, player);
+                return CreatedAtAction(nameof(GetPlayerById), new { id = player.ID }, playerDto);
             }
 
             [AllowAnonymous]

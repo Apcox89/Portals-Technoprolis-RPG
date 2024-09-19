@@ -9,7 +9,7 @@
        public class NpcsController : ControllerBase
        {
            private static List<Npc> npcs = new List<Npc>();
-
+            //Cox note: Add api-spec/definitions for npc's + serialize/deserialize as needed for clean design
            [HttpGet]
            public ActionResult<IEnumerable<Npc>> GetNpcs()
            {
