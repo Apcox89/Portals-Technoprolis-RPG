@@ -19,6 +19,7 @@ namespace Portals_Technoprolis_RPG.Models
         public List<Achievement> AchievementCollection { get; set; }
 
     }
+    //Cox note: Composition v. Inheritance ex -- Quests include Achievements
     public class Achievement
     {
         //get the details from the Artifact class:
